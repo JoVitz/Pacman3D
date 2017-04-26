@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     public void ScareGhosts()
     {
+        Debug.Log("start scare");
         scared = true;
         blinky.GetComponent<GhostMove>().Frighten();
         pinky.GetComponent<GhostMove>().Frighten();

@@ -33,7 +33,11 @@ public class TileManager : MonoBehaviour {
 
     }
 
+    void Update()
+    {
+        DrawNeighbors();
 
+    }
     //-----------------------------------------------------------------------
     // hardcoded tile data: 1 = free tile, 0 = wall
     void ReadTiles()
@@ -121,7 +125,23 @@ public class TileManager : MonoBehaviour {
 
     }
 
+    void DrawNeighbors()
+    {
+        foreach (Tile tile in tiles)
+        {
+            Vector2 pos = new Vector2(tile.x, tile.y);
+            Vector2 up = new Vector2(tile.x + 0.1f, tile.y + 1);
+            Vector2 down = new Vector2(tile.x - 0.1f, tile.y - 1);
+            Vector2 left = new Vector2(tile.x - 1, tile.y + 0.1f);
+            Vector2 right = new Vector2(tile.x + 1, tile.y - 0.1f);
 
+            if (tile.up != null) Debug.DrawLine(pos, up);
+            if (tile.down != null) Debug.DrawLine(pos, down);
+            if (tile.left != null) Debug.DrawLine(pos, left);
+            if (tile.right != null) Debug.DrawLine(pos, right);
+        }
+
+    }
     //----------------------------------------------------------------------
     // returns the index in the tiles list of a given tile's coordinates
     public int Index(int X, int Y)

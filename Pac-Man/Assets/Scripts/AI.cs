@@ -7,7 +7,7 @@ public class AI : MonoBehaviour {
     public Transform target;
 
     private List<TileManager.Tile> tiles = new List<TileManager.Tile>();
-    private TileManager manager;
+    public TileManager manager;
     public GhostMove ghost;
 
     public TileManager.Tile nextTile = null;
@@ -16,7 +16,6 @@ public class AI : MonoBehaviour {
 
     void Awake()
     {
-        manager = GameObject.Find("Game Manager").GetComponent<TileManager>();
         tiles = manager.tiles;
 
         if (ghost == null) Debug.Log("game object ghost not found");
