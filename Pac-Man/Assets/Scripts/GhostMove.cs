@@ -51,13 +51,12 @@ public class GhostMove : MonoBehaviour
 
     // handles
     public PacmanMove pacman;
-    private GameManager _gm;
+    public GameManager _gm;
 
     //-----------------------------------------------------------------------------------------
     // variables end, functions begin
     void Start()
     {
-        _gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _toggleInterval = _gm.scareLength * 0.33f * 0.20f;
         InitializeGhost();
     }
@@ -132,11 +131,11 @@ public class GhostMove : MonoBehaviour
         switch (name)
         {
             case "blinky":
-                data = @"10 14
-11 14
+                data = @"11 14
 11 16
 13 16
 13 18
+15 18
 
 15 18
 15 20
@@ -246,6 +245,7 @@ public class GhostMove : MonoBehaviour
 
                     wp = new Vector2(x, y);
                     waypoints.Enqueue(wp);
+                    Debug.Log("waypooint init : " + wp);
                 }
             }
         }
@@ -273,6 +273,7 @@ public class GhostMove : MonoBehaviour
 
                         wp = new Vector3(x, y, 0);
                         waypoints.Enqueue(wp);
+                        Debug.Log("waypooint scatter: " + wp);
                     }
                 }
             }
@@ -283,18 +284,18 @@ public class GhostMove : MonoBehaviour
         {
             Vector3 pos = transform.position;
 
-            // inky and clyde start going down and then up
-            if (transform.name == "inky" || transform.name == "clyde")
-            {
-                waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.5f));
-                waypoints.Enqueue(new Vector2(pos.x, pos.y + 0.5f));
-            }
-            // while pinky start going up and then down
-            else
-            {
-                waypoints.Enqueue(new Vector2(pos.x, pos.y + 0.5f));
-                waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.5f));
-            }
+            //// inky and clyde start going down and then up
+            //if (transform.name == "inky" || transform.name == "clyde")
+            //{
+            //    waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.5f));
+            //    waypoints.Enqueue(new Vector2(pos.x, pos.y + 0.5f));
+            //}
+            //// while pinky start going up and then down
+            //else
+            //{
+            //    waypoints.Enqueue(new Vector2(pos.x, pos.y + 0.5f));
+            //    waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.5f));
+            //}
         }
 
     }
@@ -442,7 +443,8 @@ public class GhostMove : MonoBehaviour
     // Utility functions
     void MoveToWaypoint(bool loop = false)
     {
-        waypoint = waypoints.Peek();		// get the waypoint (CHECK NULL?)
+        waypoint = waypoints.Peek();        // get the waypoint (CHECK NULL?)
+        Debug.Log("waypooint peek: " + waypoint);
         if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)    // if its not reached
         {                                                           // move towards it
             Vector2 temp = new Vector2();
