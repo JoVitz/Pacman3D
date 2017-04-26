@@ -25,6 +25,8 @@ public class TileManager : MonoBehaviour {
     };
 
     public List<Tile> tiles = new List<Tile>();
+	public List<Tile> tiles2 = new List<Tile>();
+	public List<Tile> tiles3 = new List<Tile>();
 
     // Use this for initialization
     void Start()
@@ -124,6 +126,177 @@ public class TileManager : MonoBehaviour {
         }
 
     }
+
+	void ReadTiles2()
+	{
+		// 19*21 hardwired data instead of reading from file (not feasible on web player)
+		string data = @"0000000000000000000
+0111111110111111110
+0101001010101001010
+0101111011101111010
+0101001010101001010
+0111111111111111110
+0000100000100010000
+0000111011111010000
+0000101010001010000
+0000111010001010000
+0000100010001110000
+0000111110001010000
+0000101010001010000
+0111101111111011110
+0100000100001000010
+0111111111111111110
+0010100001000010100
+0110110111110110110
+0100010100010100010
+0111111111111111110
+0000000000000000000
+";
+
+		int X = 1, Y = 21;
+		using (StringReader reader = new StringReader(data))
+		{
+			string line;
+			while ((line = reader.ReadLine()) != null)
+			{
+
+				X = 1; // for every line
+				for (int i = 0; i < line.Length; ++i)
+				{
+					Tile newTile = new Tile(X, Y);
+
+					// if the tile we read is a valid tile (movable)
+					if (line[i] == '1')
+					{
+						// check for left-right neighbor
+						if (i != 0 && line[i - 1] == '1')
+						{
+							// assign each tile to the corresponding side of other tile
+							newTile.left = tiles[tiles.Count - 1];
+							tiles2[tiles2.Count - 1].right = newTile;
+
+							// adjust adjcent tile counts of each tile
+							newTile.adjacentCount++;
+							tiles2[tiles2.Count - 1].adjacentCount++;
+						}
+					}
+
+					// if the current tile is not movable
+					else newTile.occupied = true;
+
+					// check for up-down neighbor, starting from second row (Y<30)
+					int upNeighbor = tiles2.Count - line.Length; // up neighbor index
+					if (Y < 20 && !newTile.occupied && !tiles2[upNeighbor].occupied)
+					{
+						tiles2[upNeighbor].down = newTile;
+						newTile.up = tiles2[upNeighbor];
+
+						// adjust adjcent tile counts of each tile
+						newTile.adjacentCount++;
+						tiles2[upNeighbor].adjacentCount++;
+					}
+
+					tiles2.Add(newTile);
+					X++;
+				}
+
+				Y--;
+			}
+		}
+
+		// after reading all tiles, determine the intersection tiles
+		foreach (Tile tile in tiles2)
+		{
+			if (tile.adjacentCount > 2)
+				tile.isIntersection = true;
+		}
+
+	}
+
+	void ReadTiles3()
+	{
+		// 19*21 hardwired data instead of reading from file (not feasible on web player)
+		string data = @"0000000000000000000
+0111111110111111110
+0100010110100100010
+0101011111110111110
+0101010100010100010
+0111110101110111110
+0000110100011110000
+0000111111111110000
+0000100001000110000
+0000110111000110000
+0000110101000110000
+0000111101000110000
+0000100101111110000
+0111111111100011110
+0100101010111010010
+0111101010001111110
+0010101010111110100
+0110111110100010110
+0100100000110110010
+0111111111111111110
+0000000000000000000";
+
+		int X = 1, Y = 21;
+		using (StringReader reader = new StringReader(data))
+		{
+			string line;
+			while ((line = reader.ReadLine()) != null)
+			{
+
+				X = 1; // for every line
+				for (int i = 0; i < line.Length; ++i)
+				{
+					Tile newTile = new Tile(X, Y);
+
+					// if the tile we read is a valid tile (movable)
+					if (line[i] == '1')
+					{
+						// check for left-right neighbor
+						if (i != 0 && line[i - 1] == '1')
+						{
+							// assign each tile to the corresponding side of other tile
+							newTile.left = tiles[tiles.Count - 1];
+							tiles2[tiles3.Count - 1].right = newTile;
+
+							// adjust adjcent tile counts of each tile
+							newTile.adjacentCount++;
+							tiles2[tiles3.Count - 1].adjacentCount++;
+						}
+					}
+
+					// if the current tile is not movable
+					else newTile.occupied = true;
+
+					// check for up-down neighbor, starting from second row (Y<30)
+					int upNeighbor = tiles3.Count - line.Length; // up neighbor index
+					if (Y < 20 && !newTile.occupied && !tiles3[upNeighbor].occupied)
+					{
+						tiles2[upNeighbor].down = newTile;
+						newTile.up = tiles3[upNeighbor];
+
+						// adjust adjcent tile counts of each tile
+						newTile.adjacentCount++;
+						tiles3[upNeighbor].adjacentCount++;
+					}
+
+					tiles3.Add(newTile);
+					X++;
+				}
+
+				Y--;
+			}
+		}
+
+		// after reading all tiles, determine the intersection tiles
+		foreach (Tile tile in tiles3)
+		{
+			if (tile.adjacentCount > 2)
+				tile.isIntersection = true;
+		}
+
+	}
 
     void DrawNeighbors()
     {
