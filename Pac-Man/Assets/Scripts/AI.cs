@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AI : MonoBehaviour {
 
@@ -16,7 +17,20 @@ public class AI : MonoBehaviour {
 
     void Awake()
     {
-        tiles = manager.tiles;
+        if(SceneManager.GetActiveScene().name.Contains("2"))
+        {
+            tiles = manager.tiles2;
+
+        }
+        else if (SceneManager.GetActiveScene().name.Contains("3"))
+        {
+            tiles = manager.tiles3; 
+        }
+        else
+        {
+            tiles = manager.tiles; 
+        }
+
 
         if (ghost == null) Debug.Log("game object ghost not found");
         if (manager == null) Debug.Log("game object game manager not found");
@@ -24,7 +38,7 @@ public class AI : MonoBehaviour {
 
     public void AILogic()
     {
-        // get current tile//TODO check values
+        // get current tile
         Vector2 currentPos = new Vector2(transform.position.x + 0.499f, transform.position.y + 0.499f);
         currentTile = tiles[manager.Index((int)currentPos.x, (int)currentPos.y)];
 

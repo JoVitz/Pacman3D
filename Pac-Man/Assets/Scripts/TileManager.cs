@@ -27,25 +27,7 @@ public class TileManager : MonoBehaviour {
     public List<Tile> tiles = new List<Tile>();
 	public List<Tile> tiles2 = new List<Tile>();
 	public List<Tile> tiles3 = new List<Tile>();
-
-    // Use this for initialization
-    void Start()
-    {
-        ReadTiles();
-
-    }
-
-    void Update()
-    {
-        DrawNeighbors();
-
-    }
-    //-----------------------------------------------------------------------
-    // hardcoded tile data: 1 = free tile, 0 = wall
-    void ReadTiles()
-    {
-        // 19*21 hardwired data instead of reading from file (not feasible on web player)
-        string data = @"0000000000000000000
+    private string data = @"0000000000000000000
 0111111110111111110
 0100100010100010010
 0111111111111111110
@@ -66,71 +48,7 @@ public class TileManager : MonoBehaviour {
 0100000010100000010
 0111111111111111110
 0000000000000000000";
-
-        int X = 1, Y = 21;
-        using (StringReader reader = new StringReader(data))
-        {
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-
-                X = 1; // for every line
-                for (int i = 0; i < line.Length; ++i)
-                {
-                    Tile newTile = new Tile(X, Y);
-
-                    // if the tile we read is a valid tile (movable)
-                    if (line[i] == '1')
-                    {
-                        // check for left-right neighbor
-                        if (i != 0 && line[i - 1] == '1')
-                        {
-                            // assign each tile to the corresponding side of other tile
-                            newTile.left = tiles[tiles.Count - 1];
-                            tiles[tiles.Count - 1].right = newTile;
-
-                            // adjust adjcent tile counts of each tile
-                            newTile.adjacentCount++;
-                            tiles[tiles.Count - 1].adjacentCount++;
-                        }
-                    }
-
-                    // if the current tile is not movable
-                    else newTile.occupied = true;
-
-                    // check for up-down neighbor, starting from second row (Y<30)
-                    int upNeighbor = tiles.Count - line.Length; // up neighbor index
-                    if (Y < 20 && !newTile.occupied && !tiles[upNeighbor].occupied)
-                    {
-                        tiles[upNeighbor].down = newTile;
-                        newTile.up = tiles[upNeighbor];
-
-                        // adjust adjcent tile counts of each tile
-                        newTile.adjacentCount++;
-                        tiles[upNeighbor].adjacentCount++;
-                    }
-
-                    tiles.Add(newTile);
-                    X++;
-                }
-
-                Y--;
-            }
-        }
-
-        // after reading all tiles, determine the intersection tiles
-        foreach (Tile tile in tiles)
-        {
-            if (tile.adjacentCount > 2)
-                tile.isIntersection = true;
-        }
-
-    }
-
-	void ReadTiles2()
-	{
-		// 19*21 hardwired data instead of reading from file (not feasible on web player)
-		string data = @"0000000000000000000
+    private string data2 = @"0000000000000000000
 0111111110111111110
 0101001010101001010
 0101111011101111010
@@ -150,73 +68,8 @@ public class TileManager : MonoBehaviour {
 0110110111110110110
 0100010100010100010
 0111111111111111110
-0000000000000000000
-";
-
-		int X = 1, Y = 21;
-		using (StringReader reader = new StringReader(data))
-		{
-			string line;
-			while ((line = reader.ReadLine()) != null)
-			{
-
-				X = 1; // for every line
-				for (int i = 0; i < line.Length; ++i)
-				{
-					Tile newTile = new Tile(X, Y);
-
-					// if the tile we read is a valid tile (movable)
-					if (line[i] == '1')
-					{
-						// check for left-right neighbor
-						if (i != 0 && line[i - 1] == '1')
-						{
-							// assign each tile to the corresponding side of other tile
-							newTile.left = tiles[tiles.Count - 1];
-							tiles2[tiles2.Count - 1].right = newTile;
-
-							// adjust adjcent tile counts of each tile
-							newTile.adjacentCount++;
-							tiles2[tiles2.Count - 1].adjacentCount++;
-						}
-					}
-
-					// if the current tile is not movable
-					else newTile.occupied = true;
-
-					// check for up-down neighbor, starting from second row (Y<30)
-					int upNeighbor = tiles2.Count - line.Length; // up neighbor index
-					if (Y < 20 && !newTile.occupied && !tiles2[upNeighbor].occupied)
-					{
-						tiles2[upNeighbor].down = newTile;
-						newTile.up = tiles2[upNeighbor];
-
-						// adjust adjcent tile counts of each tile
-						newTile.adjacentCount++;
-						tiles2[upNeighbor].adjacentCount++;
-					}
-
-					tiles2.Add(newTile);
-					X++;
-				}
-
-				Y--;
-			}
-		}
-
-		// after reading all tiles, determine the intersection tiles
-		foreach (Tile tile in tiles2)
-		{
-			if (tile.adjacentCount > 2)
-				tile.isIntersection = true;
-		}
-
-	}
-
-	void ReadTiles3()
-	{
-		// 19*21 hardwired data instead of reading from file (not feasible on web player)
-		string data = @"0000000000000000000
+0000000000000000000";
+    private string data3 = @"0000000000000000000
 0111111110111111110
 0100010110100100010
 0101011111110111110
@@ -238,65 +91,87 @@ public class TileManager : MonoBehaviour {
 0111111111111111110
 0000000000000000000";
 
-		int X = 1, Y = 21;
-		using (StringReader reader = new StringReader(data))
-		{
-			string line;
-			while ((line = reader.ReadLine()) != null)
-			{
+    // Use this for initialization
+    void Start()
+    {
+        ReadTiles(tiles, data);
+        ReadTiles(tiles2, data2);
+        ReadTiles(tiles3, data3);
 
-				X = 1; // for every line
-				for (int i = 0; i < line.Length; ++i)
-				{
-					Tile newTile = new Tile(X, Y);
+    }
 
-					// if the tile we read is a valid tile (movable)
-					if (line[i] == '1')
-					{
-						// check for left-right neighbor
-						if (i != 0 && line[i - 1] == '1')
-						{
-							// assign each tile to the corresponding side of other tile
-							newTile.left = tiles[tiles.Count - 1];
-							tiles2[tiles3.Count - 1].right = newTile;
+    void Update()
+    {
+        DrawNeighbors();
 
-							// adjust adjcent tile counts of each tile
-							newTile.adjacentCount++;
-							tiles2[tiles3.Count - 1].adjacentCount++;
-						}
-					}
+    }
+    //-----------------------------------------------------------------------
+    // hardcoded tile data: 1 = free tile, 0 = wall
+    void ReadTiles(List<Tile> tileset, string dataset)
+    {
+        // 19*21 hardwired data instead of reading from file (not feasible on web player)
+        
 
-					// if the current tile is not movable
-					else newTile.occupied = true;
+        int X = 1, Y = 21;
+        using (StringReader reader = new StringReader(dataset))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
 
-					// check for up-down neighbor, starting from second row (Y<30)
-					int upNeighbor = tiles3.Count - line.Length; // up neighbor index
-					if (Y < 20 && !newTile.occupied && !tiles3[upNeighbor].occupied)
-					{
-						tiles2[upNeighbor].down = newTile;
-						newTile.up = tiles3[upNeighbor];
+                X = 1; // for every line
+                for (int i = 0; i < line.Length; ++i)
+                {
+                    Tile newTile = new Tile(X, Y);
 
-						// adjust adjcent tile counts of each tile
-						newTile.adjacentCount++;
-						tiles3[upNeighbor].adjacentCount++;
-					}
+                    // if the tile we read is a valid tile (movable)
+                    if (line[i] == '1')
+                    {
+                        // check for left-right neighbor
+                        if (i != 0 && line[i - 1] == '1')
+                        {
+                            // assign each tile to the corresponding side of other tile
+                            newTile.left = tileset[tileset.Count - 1];
+                            tileset[tileset.Count - 1].right = newTile;
 
-					tiles3.Add(newTile);
-					X++;
-				}
+                            // adjust adjcent tile counts of each tile
+                            newTile.adjacentCount++;
+                            tileset[tileset.Count - 1].adjacentCount++;
+                        }
+                    }
 
-				Y--;
-			}
-		}
+                    // if the current tile is not movable
+                    else newTile.occupied = true;
 
-		// after reading all tiles, determine the intersection tiles
-		foreach (Tile tile in tiles3)
-		{
-			if (tile.adjacentCount > 2)
-				tile.isIntersection = true;
-		}
+                    // check for up-down neighbor, starting from second row (Y<30)
+                    int upNeighbor = tileset.Count - line.Length; // up neighbor index
+                    if (Y < 20 && !newTile.occupied && !tileset[upNeighbor].occupied)
+                    {
+                        tileset[upNeighbor].down = newTile;
+                        newTile.up = tileset[upNeighbor];
 
-	}
+                        // adjust adjcent tile counts of each tile
+                        newTile.adjacentCount++;
+                        tileset[upNeighbor].adjacentCount++;
+                    }
+
+                    tileset.Add(newTile);
+                    X++;
+                }
+
+                Y--;
+            }
+        }
+
+        // after reading all tiles, determine the intersection tiles
+        foreach (Tile tile in tileset)
+        {
+            if (tile.adjacentCount > 2)
+                tile.isIntersection = true;
+        }
+
+    }
+
 
     void DrawNeighbors()
     {
