@@ -6,9 +6,11 @@ public class PacmanMove : MonoBehaviour {
 	public float speed = 0.4f;
 	Vector2 dest = Vector2.zero;
     Vector2 radius = new Vector2(1f, 1f);
+    float tileSize = 2.5f;
+    public Vector2 dir;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		dest = transform.position;		
 	}
     /*void Update()
@@ -26,17 +28,17 @@ public class PacmanMove : MonoBehaviour {
         // Check for Input if not moving
         if ((Vector2)transform.position == dest) {
 			if (Input.GetKey(KeyCode.UpArrow) && valid(Vector2.up + radius))
-				dest = (Vector2)transform.position + Vector2.up*2.5f;
+				dest = (Vector2)transform.position + Vector2.up*tileSize;
 			if (Input.GetKey(KeyCode.RightArrow) && valid(Vector2.right + radius))
-				dest = (Vector2)transform.position + Vector2.right*2.5f;
+				dest = (Vector2)transform.position + Vector2.right*tileSize;
 			if (Input.GetKey(KeyCode.DownArrow) && valid(-Vector2.up - radius))
-				dest = (Vector2)transform.position - Vector2.up*2.5f;
+				dest = (Vector2)transform.position - Vector2.up*tileSize;
 			if (Input.GetKey(KeyCode.LeftArrow) && valid(-Vector2.right - radius))
-				dest = (Vector2)transform.position - Vector2.right*2.5f;
+				dest = (Vector2)transform.position - Vector2.right*tileSize;
 		}
 
 		// Animation Parameters
-		Vector2 dir = dest - (Vector2)transform.position;
+		dir = dest - (Vector2)transform.position;
 		GetComponent<Animator>().SetFloat("DirX", dir.x);
 		GetComponent<Animator>().SetFloat("DirY", dir.y);
 	}
@@ -45,7 +47,11 @@ public class PacmanMove : MonoBehaviour {
 		// Cast Line from 'next to Pac-Man' to 'Pac-Man'
 		Vector2 pos = transform.position;
 		RaycastHit2D hit = Physics2D.Linecast(pos + dir , pos);
-        Debug.Log(hit.collider);
+        //Debug.Log(hit.collider);
 		return (hit.collider == GetComponent<Collider2D>());
 	}
+    public Vector2 getDir()
+    {
+        return dir;
+    }
 }
