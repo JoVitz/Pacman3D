@@ -19,7 +19,7 @@ public class AI : MonoBehaviour {
         tiles = manager.tiles;
 
         if (ghost == null) Debug.Log("game object ghost not found");
-        if (manager == null) Debug.Log("game object Game Manager not found");
+        if (manager == null) Debug.Log("game object game manager not found");
     }
 
     public void AILogic()
@@ -131,7 +131,6 @@ public class AI : MonoBehaviour {
 
             //---------------------------------------------------------------------------------------
             // IF WE ARE AT INTERSECTION
-            // choose one available option at random
             if (currentTile.isIntersection)
             {
                 List<TileManager.Tile> availableTiles = new List<TileManager.Tile>();
@@ -143,16 +142,17 @@ public class AI : MonoBehaviour {
 
                 int rand = Random.Range(0, availableTiles.Count);
                 chosenTile = availableTiles[rand];
-                ghost.direction = new Vector2(chosenTile.x - currentTile.x, chosenTile.y - currentTile.y).normalized;//Vector2.Normalize(new Vector2(chosenTile.x - currentTile.x, chosenTile.y - currentTile.y));
+                ghost.direction = new Vector2(chosenTile.x - currentTile.x, chosenTile.y - currentTile.y).normalized;
+				//Vector2.Normalize(new Vector2(chosenTile.x - currentTile.x, chosenTile.y - currentTile.y));
                 //Debug.Log (ghost.name + ": Chosen Tile (" + chosenTile.x + ", " + chosenTile.y + ")" );
             }
 
         }
 
-        // if there is no decision to be made, designate next waypoint for the ghost
+        // else, designate next waypoint for the ghost
         else
         {
-            ghost.direction = ghost.direction;  // setter updates the waypoint
+            ghost.direction = ghost.direction; 
         }
     }
 
@@ -163,42 +163,36 @@ public class AI : MonoBehaviour {
         TileManager.Tile targetTile;
         Vector2 dir;
 
-        // get the target tile position (round it down to int so we can reach with Index() function)
+        // get the target tile position
         switch (name)
         {
             case "blinky":  // target = pacman
                 targetPos = new Vector2(target.position.x + 0.499f, target.position.y + 0.499f);
                 targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
                 break;
-            case "pinky":   // target = pacman + 4*pacman's direction (4 steps ahead of pacman)
+            case "pinky":   // target = pacman + 2*pacman direction
                 dir = target.GetComponent<PacmanMove>().getDir();
-                targetPos = new Vector2(target.position.x + 0.499f, target.position.y + 0.499f) + 4 * dir;
-
-                // if pacmans going up, not 4 ahead but 4 up and 4 left is the target
-                // read about it here: http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior
-                // so subtract 4 from X coord from target position
-                if (dir == Vector2.up) targetPos -= new Vector2(4, 0);
-
+                targetPos = new Vector2(target.position.x + 0.499f, target.position.y + 0.499f) + 2 * dir;
                 targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
                 break;
             case "inky":    // target = ambushVector(pacman+2 - blinky) added to pacman+2
                 dir = target.GetComponent<PacmanMove>().getDir();
                 Vector2 blinkyPos = GameObject.Find("blinky").transform.position;
                 Vector2 ambushVector = new Vector2();
-                ambushVector.x = target.position.x + 2 * dir.x - blinkyPos.x;
-                ambushVector.y = target.position.y + 2 * dir.y - blinkyPos.y;
+                ambushVector.x = target.position.x + 1 * dir.x - blinkyPos.x;
+                ambushVector.y = target.position.y + 1 * dir.y - blinkyPos.y;
                 targetPos = new Vector2(target.position.x + 0.499f, target.position.y + 0.499f) + 2 * dir + ambushVector;
                 targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
                 break;
             case "clyde":
                 targetPos = new Vector2(target.position.x + 0.499f, target.position.y + 0.499f);
                 targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
-                if (manager.distance(targetTile, currentTile) < 9)
+                if (manager.distance(targetTile, currentTile) < 4)
                     targetTile = tiles[manager.Index(0, 2)];
                 break;
             default:
                 targetTile = null;
-                Debug.Log("TARGET TILE NOT ASSIGNED");
+                Debug.Log("No target tile");
                 break;
 
         }

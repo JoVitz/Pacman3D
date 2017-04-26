@@ -132,54 +132,94 @@ public class GhostMove : MonoBehaviour
         switch (name)
         {
             case "blinky":
-                data = @"23.75 28.75
-22 26
+                data = @"10 14
+11 14
+11 16
+13 16
+13 18
 
-27 26
-27 30
-22 30
-22 26";
+15 18
+15 20
+18 20
+18 18";
+			
+//				@"23.75 28.75
+//				22 26
+//27 26
+//27 30
+//22 30
+//22 26";
                 break;
             case "pinky":
-                data = @"14.5 17
-14 17
-14 20
-7 20
+                data = @"10 12
+10 14
+9 14
+9 16
+7 16
+7 18
 
-7 26
-7 30
-2 30
-2 26";
+5 18
+5 20
+2 20
+2 18";
+			
+//				@"14.5 17
+//14 17
+//14 20
+//7 20
+
+//7 26
+//7 30
+//2 30
+//2 26";
                 break;
             case "inky":
-                data = @"16.5 17
-15 17
-15 20
-22 20
+                data = @"11 12
+10 12
+10 14
+13 14
+13 8
+15 8
 
-22 8
-19 8
-19 5
-16 5
-16 2
-27 2
-27 5
-22 5";
+15 6
+15 4
+18 4
+18 2
+11 2
+11 4
+13 4
+13 6";
+			
+//			@"16.5 17
+//15 17
+//15 20
+//22 20
+
+//22 8
+//19 8
+//19 5
+//16 5
+//16 2
+//27 2
+//27 5
+//22 5";
                 break;
             case "clyde":
-                data = @"12.5 17
-14 17
-14 20
-7 20
-
+                data = @"9 12
+10 12
+10 14
+7 14
 7 8
-7 5
-2 5
+5 8
+
+5 6
+5 4
+2 4
 2 2
-13 2
-13 5
-10 5
-10 8";
+9 2
+9 4
+7 4
+7 6";
                 break;
 
         }
@@ -258,22 +298,22 @@ public class GhostMove : MonoBehaviour
         }
 
     }
-    //TODO utile? check values
+ 
     private Vector2 getStartPosAccordingToName()
     {
         switch (gameObject.name)
         {
             case "blinky":
-                return new Vector2(15f, 20f);
+                return new Vector2(10f, 14f);
 
             case "pinky":
-                return new Vector2(14.5f, 17f);
+                return new Vector2(10f, 12f);
 
             case "inky":
-                return new Vector2(16.5f, 17f);
+                return new Vector2(11f, 12f);
 
             case "clyde":
-                return new Vector2(12.5f, 17f);
+                return new Vector2(9f, 12f);
         }
 
         return new Vector2();
