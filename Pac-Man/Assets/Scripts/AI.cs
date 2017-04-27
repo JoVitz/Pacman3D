@@ -207,8 +207,18 @@ public class AI : MonoBehaviour {
                 }
                 break;
 			case "woody1":
+//				if (manager.distance (targetTile, currentTile) < 4) 
+//				{
+					targetPos = new Vector2 (target.position.x + 0.499f, target.position.y + 0.499f);
+					targetTile = tiles [manager.Index ((int)targetPos.x, (int)targetPos.y)];
+//				}
+				break;
+			case "woody2":
+//			if (manager.distance (targetTile, currentTile) < 4) 
+//			{
 				targetPos = new Vector2 (target.position.x + 0.499f, target.position.y + 0.499f);
 				targetTile = tiles [manager.Index ((int)targetPos.x, (int)targetPos.y)];
+//			}
 				break;
             default:
                 targetTile = null;
