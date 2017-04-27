@@ -7,13 +7,13 @@ public class AI : MonoBehaviour {
 
     public Transform target;
 
-    private List<TileManager.Tile> tiles = new List<TileManager.Tile>();
+    public List<TileManager.Tile> tiles = new List<TileManager.Tile>();
     public TileManager manager;
     public GhostMove ghost;
 
     public TileManager.Tile nextTile = null;
     public TileManager.Tile targetTile;
-    TileManager.Tile currentTile;
+    public TileManager.Tile currentTile;
 
     void Awake()
     {

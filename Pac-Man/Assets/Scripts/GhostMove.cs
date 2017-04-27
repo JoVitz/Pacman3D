@@ -9,7 +9,7 @@ public class GhostMove : MonoBehaviour
     // ----------------------------
     // Navigation variables
     private Vector2 waypoint;           // AI-determined waypoint
-    private Queue<Vector2> waypoints;   // waypoints used on Init and Scatter states
+	private Queue<Vector2> waypoints = new Queue<Vector2>();   // waypoints used on Init and Scatter states
 
     // direction is set from the AI component
     public Vector2 _direction;
@@ -114,7 +114,6 @@ public class GhostMove : MonoBehaviour
         InitializeWaypoints(state);
     }
 
-    //TODO
     private void InitializeWaypoints(State st)
     {
         //--------------------------------------------------
@@ -135,7 +134,7 @@ public class GhostMove : MonoBehaviour
 11 16
 13 16
 13 18
-15 18
+15 18	
 
 15 18
 15 20
@@ -413,7 +412,6 @@ public class GhostMove : MonoBehaviour
                /* Destroy(other.gameObject);
                 Debug.Log("gameOver");
                 Application.Quit();*/
-                //TODO gameover
             }
 
         }
@@ -462,7 +460,16 @@ public class GhostMove : MonoBehaviour
 
     void Scatter()
     {
-		if (Time.time >= timeToEndScatter && name != "woody1" && name !="woody2")
+		AI ai;
+
+		// Retrieve values for position of Pacman
+		ai = (AI)GetComponentInParent (typeof(AI));
+		Vector2 currentPos = new Vector2(transform.position.x + 0.499f, transform.position.y + 0.499f);
+		TileManager.Tile currentTile = ai.tiles[ai.manager.Index((int)currentPos.x, (int)currentPos.y)];
+		Vector2 targetPos = new Vector2 (ai.target.position.x + 0.499f, ai.target.position.y + 0.499f);
+		TileManager.Tile targetTile = ai.tiles [ai.manager.Index ((int)targetPos.x, (int)targetPos.y)];
+
+		if ((Time.time >= timeToEndScatter && name != "woody1" && name !="woody2") || ((name == "woody1" || name =="woody2") && ai.manager.distance (targetTile, currentTile) <4))
         {
             waypoints.Clear();
             state = State.Chase;
@@ -507,7 +514,7 @@ public class GhostMove : MonoBehaviour
         }
 
         // if at waypoint, run AI run away logic
-        else GetComponent<AI>().RunLogic();
+		else GetComponentInParent<AI>().RunLogic();
 
     }
 
@@ -548,7 +555,7 @@ public class GhostMove : MonoBehaviour
     {
         // if the ghost is not running, do nothing
         if (state != State.Run) return;
-
+		Debug.Log (waypoints);
         waypoints.Clear();
         state = State.Chase;
         _timeToToggleWhite = 0;
