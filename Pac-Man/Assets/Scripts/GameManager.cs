@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject pinky;
     public GameObject inky;
     public GameObject clyde;
+	public GameObject woody1;
 
     public static bool scared;
 
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
         pinky.GetComponent<GhostMove>().Frighten();
         inky.GetComponent<GhostMove>().Frighten();
         clyde.GetComponent<GhostMove>().Frighten();
+		woody1.GetComponent<GhostMove>().Frighten();
         _timeToCalm = Time.time + scareLength;
 
         Debug.Log("Ghosts Scared");
@@ -65,6 +67,7 @@ public class GameManager : MonoBehaviour
         pinky.GetComponent<GhostMove>().Calm();
         inky.GetComponent<GhostMove>().Calm();
         clyde.GetComponent<GhostMove>().Calm();
+		woody1.GetComponent<GhostMove>().Calm();
     }
 
 

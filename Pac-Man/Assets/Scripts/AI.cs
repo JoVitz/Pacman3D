@@ -198,12 +198,35 @@ public class AI : MonoBehaviour {
                 targetPos = new Vector2(target.position.x + 0.499f, target.position.y + 0.499f) + 2 * dir + ambushVector;
                 targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
                 break;
-            case "clyde":
-                targetPos = new Vector2(target.position.x + 0.499f, target.position.y + 0.499f);
-                targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
-                if (manager.distance(targetTile, currentTile) < 4)
-                    targetTile = tiles[manager.Index(0, 2)];
+			case "clyde":
+				targetPos = new Vector2 (target.position.x + 0.499f, target.position.y + 0.499f);
+				targetTile = tiles [manager.Index ((int)targetPos.x, (int)targetPos.y)];
+				if (manager.distance (targetTile, currentTile) < 4) {
+					int rand = Random.Range (0, 4);
+					switch (rand) {
+					case 1:
+						targetTile = tiles [manager.Index (2, 2)];
+						break;
+					case 2:
+						targetTile = tiles [manager.Index (18, 20)];
+						break;
+					case 3:
+						targetTile = tiles [manager.Index (2, 20)];
+						break;
+					case 4:
+						targetTile = tiles [manager.Index (18, 2)];
+						break;
+					default:
+						targetTile = null;
+						Debug.Log ("Yolo");
+						break;
+					}
+				}
                 break;
+			case "woody1":
+				targetPos = new Vector2 (target.position.x + 0.499f, target.position.y + 0.499f);
+				targetTile = tiles [manager.Index ((int)targetPos.x, (int)targetPos.y)];
+				break;
             default:
                 targetTile = null;
                 Debug.Log("No target tile");

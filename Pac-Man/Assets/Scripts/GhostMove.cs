@@ -221,6 +221,64 @@ public class GhostMove : MonoBehaviour
 7 6";
                 break;
 
+		case "woody1":
+			data = @"2 2
+2 4
+2 2
+
+18 2
+18 4
+17 4
+17 6
+2 6
+2 8
+5 8
+5 10
+9 10
+9 14
+11 14
+11 16
+18 16
+18 20
+11 20
+11 14
+13 14
+13 6
+10 6
+10 4
+8 4
+8 2"; 
+			break;
+
+		case "woody2":
+			data = @"2 20
+2 16
+2 20
+
+18 2
+18 4
+17 4
+17 6
+2 6
+2 8
+5 8
+5 10
+9 10
+9 14
+11 14
+11 16
+18 16
+18 20
+11 20
+11 14
+13 14
+13 6
+10 6
+10 4
+8 4
+8 2"; 
+			break;
+
         }
 
         //-------------------------------------------------
@@ -237,7 +295,7 @@ public class GhostMove : MonoBehaviour
                 // stop reading if empty line is reached
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (line.Length == 0) break; // DOES IT WORK????
+                    if (line.Length == 0) break; 
 
                     string[] values = line.Split(' ');
                     float x = float.Parse(values[0]);
@@ -245,7 +303,7 @@ public class GhostMove : MonoBehaviour
 
                     wp = new Vector2(x, y);
                     waypoints.Enqueue(wp);
-                    Debug.Log("waypooint init : " + wp);
+                    Debug.Log("waypoint init : " + wp);
                 }
             }
         }
@@ -273,7 +331,7 @@ public class GhostMove : MonoBehaviour
 
                         wp = new Vector3(x, y, 0);
                         waypoints.Enqueue(wp);
-                        Debug.Log("waypooint scatter: " + wp);
+                        Debug.Log("waypoint scatter: " + wp);
                     }
                 }
             }
@@ -284,7 +342,7 @@ public class GhostMove : MonoBehaviour
         {
             Vector3 pos = transform.position;
 
-            //// inky and clyde start going down and then up
+            // inky and clyde start going down and then up
             //if (transform.name == "inky" || transform.name == "clyde")
             //{
             //    waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.5f));
@@ -315,6 +373,9 @@ public class GhostMove : MonoBehaviour
 
             case "clyde":
                 return new Vector2(9f, 12f);
+
+			case "woody1":
+				return new Vector2(2f, 2f);
         }
 
         return new Vector2();
@@ -394,7 +455,7 @@ public class GhostMove : MonoBehaviour
 
     void Scatter()
     {
-        if (Time.time >= timeToEndScatter)
+		if (Time.time >= timeToEndScatter && name != "woody1")
         {
             waypoints.Clear();
             state = State.Chase;
@@ -444,7 +505,7 @@ public class GhostMove : MonoBehaviour
     void MoveToWaypoint(bool loop = false)
     {
         waypoint = waypoints.Peek();        // get the waypoint (CHECK NULL?)
-        Debug.Log("waypooint peek: " + waypoint);
+        Debug.Log("waypoint peek: " + waypoint);
         if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)    // if its not reached
         {                                                           // move towards it
             Vector2 temp = new Vector2();
@@ -466,7 +527,6 @@ public class GhostMove : MonoBehaviour
     {
         state = State.Run;
         _direction *= -1;
-        //TODO check values
         _timeToWhite = Time.time + _gm.scareLength * 0.66f;
         _timeToToggleWhite = _timeToWhite;
         GetComponent<Animator>().SetBool("Run_White", false);
