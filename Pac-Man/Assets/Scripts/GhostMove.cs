@@ -278,6 +278,64 @@ public class GhostMove : MonoBehaviour
 2 20"; 
 			break;
 
+		case "slimy1":
+			data = @"18 2
+2 16
+2 20
+
+9 20
+9 16
+15 16
+15 8
+18 8
+18 6
+17 6
+17 4
+18 4
+18 2
+12 2
+12 4
+10 4
+10 6
+8 6
+8 8 
+7 8
+7 10
+5 10
+5 16
+2 16
+2 20"; 
+			break;
+
+		case "slimy2":
+			data = @"18 20
+2 16
+2 20
+
+9 20
+9 16
+15 16
+15 8
+18 8
+18 6
+17 6
+17 4
+18 4
+18 2
+12 2
+12 4
+10 4
+10 6
+8 6
+8 8 
+7 8
+7 10
+5 10
+5 16
+2 16
+2 20"; 
+			break;
+
         }
 
         //-------------------------------------------------
@@ -378,6 +436,12 @@ public class GhostMove : MonoBehaviour
 
 			case "woody2":
 				return new Vector2(2f, 20f);
+
+			case "slimy1":
+				return new Vector2(18f, 2f);
+
+			case "slimy2":
+				return new Vector2(18f, 20f);
         }
 
         return new Vector2();
@@ -469,7 +533,7 @@ public class GhostMove : MonoBehaviour
 		Vector2 targetPos = new Vector2 (ai.target.position.x + 0.499f, ai.target.position.y + 0.499f);
 		TileManager.Tile targetTile = ai.tiles [ai.manager.Index ((int)targetPos.x, (int)targetPos.y)];
 
-		if ((Time.time >= timeToEndScatter && name != "woody1" && name !="woody2") || ((name == "woody1" || name =="woody2") && ai.manager.distance (targetTile, currentTile) <4))
+		if ((Time.time >= timeToEndScatter && name != "woody1" && name !="woody2" && name != "slimy1" && name !="slimy2") || ((name == "woody1" || name =="woody2" || name =="slimy1" || name =="slimy2") && ai.manager.distance (targetTile, currentTile) <4))
         {
             waypoints.Clear();
             state = State.Chase;
