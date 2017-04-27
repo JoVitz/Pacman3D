@@ -35,7 +35,7 @@ public class GhostMove : MonoBehaviour
     // ----------------------------
     // Ghost mode variables
     public float scatterLength = 5f;
-    public float waitLength = 0.0f;
+    public float waitLength = 3.0f;
 
     private float timeToEndScatter;
     private float timeToEndWait;
@@ -255,28 +255,28 @@ public class GhostMove : MonoBehaviour
 2 16
 2 20
 
-18 2
-18 4
-17 4
+9 20
+9 16
+15 16
+15 8
+18 8
+18 6
 17 6
-2 6
-2 8
-5 8
-5 10
-9 10
-9 14
-11 14
-11 16
-18 16
-18 20
-11 20
-11 14
-13 14
-13 6
-10 6
+17 4
+18 4
+18 2
+12 2
+12 4
 10 4
-8 4
-8 2"; 
+10 6
+8 6
+8 8 
+7 8
+7 10
+5 10
+5 16
+2 16
+2 20"; 
 			break;
 
         }
@@ -336,24 +336,24 @@ public class GhostMove : MonoBehaviour
                 }
             }
         }
-//TODO check values
+
         // if in wait state, patrol vertically
         if (st == State.Wait)
         {
             Vector3 pos = transform.position;
 
             // inky and clyde start going down and then up
-            //if (transform.name == "inky" || transform.name == "clyde")
-            //{
-            //    waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.5f));
-            //    waypoints.Enqueue(new Vector2(pos.x, pos.y + 0.5f));
-            //}
-            //// while pinky start going up and then down
-            //else
-            //{
-            //    waypoints.Enqueue(new Vector2(pos.x, pos.y + 0.5f));
-            //    waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.5f));
-            //}
+            if (transform.name == "pinky" || transform.name == "clyde")
+            {
+                waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.1f));
+                waypoints.Enqueue(new Vector2(pos.x, pos.y + 0.1f));
+            }
+            // while pinky start going up and then down
+            else
+            {
+                waypoints.Enqueue(new Vector2(pos.x, pos.y + 0.1f));
+                waypoints.Enqueue(new Vector2(pos.x, pos.y - 0.1f));
+            }
         }
 
     }
@@ -376,6 +376,9 @@ public class GhostMove : MonoBehaviour
 
 			case "woody1":
 				return new Vector2(2f, 2f);
+
+			case "woody2":
+				return new Vector2(2f, 20f);
         }
 
         return new Vector2();
@@ -416,7 +419,7 @@ public class GhostMove : MonoBehaviour
     // State functions
     void Wait()
     {
-        if (Time.time >= timeToEndWait)
+        if (Time.time >= timeToEndWait + 3f)
         {
             state = State.Init;
             waypoints.Clear();
@@ -455,15 +458,19 @@ public class GhostMove : MonoBehaviour
 
     void Scatter()
     {
-		if (Time.time >= timeToEndScatter && name != "woody1")
+		if (Time.time >= timeToEndScatter && name != "woody1" && name !="woody2")
         {
             waypoints.Clear();
             state = State.Chase;
             return;
         }
 
+
         // get the next waypoint and move towards it
         MoveToWaypoint(true);
+
+//		if (name == "woody1" && name =="woody2")
+//			GetComponent<AI>().AILogic();
 
     }
 
