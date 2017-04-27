@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,7 +8,6 @@ public class GameManager : MonoBehaviour
     //--------------------------------------------------------
     // Game variables
 
-    public static int Level = 0;
 
     public GameObject pacman;
     public GameObject blinky;
@@ -16,10 +16,16 @@ public class GameManager : MonoBehaviour
     public GameObject clyde;
 	public GameObject woody1;
 
+    public GameObject wall1;
+    public GameObject wall2;
+
     public static bool scared;
 
     public float scareLength;
     private float _timeToCalm;
+
+    public int score;
+    public int scoreWin;
 
 
     //-------------------------------------------------------------------
@@ -28,6 +34,20 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        score = 0;
+        if (SceneManager.GetActiveScene().name.Contains("2"))
+        {
+            scoreWin = 4;
+
+        }
+        else if (SceneManager.GetActiveScene().name.Contains("3"))
+        {
+            scoreWin = 3;
+        }
+        else
+        {
+            scoreWin = 5;
+        }
     }
 
 
@@ -37,7 +57,11 @@ public class GameManager : MonoBehaviour
     {
         if (scared && _timeToCalm <= Time.time)
             CalmGhosts();
-
+        if(score == scoreWin)
+        {
+            Destroy(wall1);
+            Destroy(wall2);
+        }
     }
 
     public void ToggleScare()
@@ -51,10 +75,15 @@ public class GameManager : MonoBehaviour
         Debug.Log("start scare");
         scared = true;
         blinky.GetComponent<GhostMove>().Frighten();
+        Debug.Log("blinky");
         pinky.GetComponent<GhostMove>().Frighten();
+        Debug.Log("pinky");
         inky.GetComponent<GhostMove>().Frighten();
+        Debug.Log("inky");
         clyde.GetComponent<GhostMove>().Frighten();
-		woody1.GetComponent<GhostMove>().Frighten();
+        Debug.Log("clyde");
+        woody1.GetComponent<GhostMove>().Frighten();
+        Debug.Log("woody");
         _timeToCalm = Time.time + scareLength;
 
         Debug.Log("Ghosts Scared");

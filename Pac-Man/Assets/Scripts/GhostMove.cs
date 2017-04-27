@@ -303,7 +303,7 @@ public class GhostMove : MonoBehaviour
 
                     wp = new Vector2(x, y);
                     waypoints.Enqueue(wp);
-                    Debug.Log("waypoint init : " + wp);
+                   // Debug.Log("waypoint init : " + wp);
                 }
             }
         }
@@ -331,7 +331,7 @@ public class GhostMove : MonoBehaviour
 
                         wp = new Vector3(x, y, 0);
                         waypoints.Enqueue(wp);
-                        Debug.Log("waypoint scatter: " + wp);
+                        //Debug.Log("waypoint scatter: " + wp);
                     }
                 }
             }
@@ -400,13 +400,17 @@ public class GhostMove : MonoBehaviour
             //Destroy(other.gameObject);
             if (state == State.Run)
             {
+
                 Calm();
                 InitializeGhost(_startPos);
             }
 
             else
             {
-//TODO gameover
+               /* Destroy(other.gameObject);
+                Debug.Log("gameOver");
+                Application.Quit();*/
+                //TODO gameover
             }
 
         }
@@ -505,7 +509,7 @@ public class GhostMove : MonoBehaviour
     void MoveToWaypoint(bool loop = false)
     {
         waypoint = waypoints.Peek();        // get the waypoint (CHECK NULL?)
-        Debug.Log("waypoint peek: " + waypoint);
+//Debug.Log("waypoint peek: " + waypoint);
         if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)    // if its not reached
         {                                                           // move towards it
             Vector2 temp = new Vector2();
